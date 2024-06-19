@@ -1,12 +1,12 @@
-use primal::is_prime;
+use primal::Sieve;
 use rayon::prelude::*;
 use simple_tqdm::ParTqdm;
 
-fn caboose_fraction(c: u64) -> f64 {
+fn caboose_fraction(c: u64, sieve: &Sieve) -> f64 {
     let mut count = 0_u64;
     for n in 1..(c - 1) {
         let number: u64 = n.pow(2) - n + c;
-        let prime = is_prime(number);
+        let prime = sieve.is_prime(number as usize);
         if prime {
             count += 1;
         }
@@ -17,12 +17,15 @@ fn caboose_fraction(c: u64) -> f64 {
 fn main() {
     let target: u64 = 1_000_000;
 
+    println!("generating sieve");
+    let sieve = Sieve::new(target.pow(2) as usize);
+
     println!("checking caboose numbers");
     let caboose_fractions: Vec<(usize, f64)> = (3..target as usize)
         .into_par_iter()
         .step_by(2)
         .tqdm()
-        .map(|c| (c, caboose_fraction(c as u64)))
+        .map(|c| (c, caboose_fraction(c as u64, &sieve)))
         .collect();
 
     println!("writing to caboose_fractions.csv");
