@@ -20,6 +20,7 @@ fn main() {
     println!("checking caboose numbers");
     let caboose_fractions: Vec<(usize, f64)> = (3..target as usize)
         .into_par_iter()
+        .step_by(2)
         .tqdm()
         .map(|c| (c, caboose_fraction(c as u64)))
         .collect();
