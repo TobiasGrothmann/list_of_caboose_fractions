@@ -27,7 +27,7 @@ fn main() {
 
     println!("writing to caboose_fractions.csv");
     let mut wtr = csv::Writer::from_path("caboose_fractions.csv").unwrap();
-    wtr.write_record(&["c", "fraction"]).unwrap();
+    wtr.write_record(["c", "fraction"]).unwrap();
     for (c, percentage) in &caboose_fractions {
         wtr.write_record(&[c.to_string(), percentage.to_string()])
             .unwrap();
